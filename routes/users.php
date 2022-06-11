@@ -95,3 +95,31 @@ $app->post('/users/add', function (Request $request, Response $response, array $
     }
 
 });
+
+
+$app->delete('/users/{id}', function (Request $request, Response $response, array $args) {
+    
+    $sql =  "DELETE FROM users WHERE id={$args['id']}";
+
+    try {
+        $db = new DB();
+        $conn = $db->connect();
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+
+        $db = null;
+        $response->getBody()->write(json_encode(['success' => true, 'msg' => 'Update successful']));
+        return $response
+            ->withHeader('content-type', 'application/json');
+
+    } catch (PDOException $e) {
+        $error = array(
+            "message" => $e->getMessage()
+        );
+        return $response
+            ->withHeader('content-type', 'application/json')
+            ->withStatus(500);
+    }
+
+});
