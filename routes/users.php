@@ -61,3 +61,37 @@ $app->get('/users/{id}', function (Request $request, Response $response, array $
     }
 
 });
+
+
+$app->post('/users/add', function (Request $request, Response $response, array $args) {
+    
+    $firstName = $request->getParam('firstName');
+    $lastName = $request->getParam('lastName');
+    $phoneNumber = $request->getParam('phoneNumber');
+    $password = $request->getParam('password');
+
+    $sql =  "INSERT INTO users (firstName, lastName, phoneNumber, password) 
+        VALUES ('{$firstName}', '{$lastName}', '{$phoneNumber}', '{$password}')";
+
+    try {
+        $db = new DB();
+        $conn = $db->connect();
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+
+        $db = null;
+        $response->getBody()->write(json_encode(['success' => true, 'msg' => 'Update successful']));
+        return $response
+            ->withHeader('content-type', 'application/json');
+
+    } catch (PDOException $e) {
+        $error = array(
+            "message" => $e->getMessage()
+        );
+        return $response
+            ->withHeader('content-type', 'application/json')
+            ->withStatus(500);
+    }
+
+});
