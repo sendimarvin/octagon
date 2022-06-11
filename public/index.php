@@ -1,26 +1,17 @@
 <?php
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
-use \Interop\Container\ContainerInterface as ContainerInterface;
-use \Monolog\Logger;
-use \Monolog\Handler\StreamHandler;
+
+require __DIR__ . '../../vendor/autoload.php';
+require __DIR__ . '../../config/db.php';
+
+// $config['displayErrorDetails'] = true;
+// $config['addContentLengthHeader'] = false;
+
+// $app = new \Slim\App(['settings' => $config]);
 
 
-require '../vendor/autoload.php';
-
-$config['displayErrorDetails'] = true;
-$config['addContentLengthHeader'] = false;
-
-$app = new \Slim\App(['settings' => $config]);
-
-$container = $app->getContainer();
-$container['greeting'] = function  () {
-    return 'Hello from container';
-};
-
-$app->get('/', function () {
-    $this->greeting;
-    echo "App finished running";
-});
+//USERS ROUTES
+require __DIR__ . '/../routes/users.php';
 
 $app->run();
