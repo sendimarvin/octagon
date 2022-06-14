@@ -7,9 +7,13 @@ class DB {
     private $dbname = 'octagon';
 
     public function connect () {
-        $conn_str = "mysql:host=$this->host;dbname=$this->dbname";
-        $conn = new PDO($conn_str, $this->user, $this->pass);
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        try {
+            $conn = new PDO("sqlite:D:\projects\octagon\db\octagon");
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (Exception $e) {
+            die ($e->getMessage());
+        }
         
         return $conn;
     }
